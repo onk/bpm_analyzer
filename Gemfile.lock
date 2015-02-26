@@ -1,10 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    gruff (0.5.1)
+      rmagick
+    rmagick (2.13.4)
     wav-file (0.0.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  gruff
   wav-file
