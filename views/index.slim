@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title BPM Analyzer
+
+  body
+    h1 BPM Analyzer
+    - if @result
+      table
+        tr
+          td
+            ol
+              - @top_10.each_with_index do |(bpm, probability), i|
+                li #{bpm}BPM : #{probability}
+          td
+            img[src="output.png" width="600"]
+    form[action="/" method="post"]
+      input[type="file" name="file"]
+      input[type="submit"]

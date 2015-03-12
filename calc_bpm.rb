@@ -10,7 +10,7 @@ Bundler.require
 
 # wav ファイル読み込み
 # http://shokai.org/blog/archives/5408
-def read_wav(filename = "input.wav")
+def read_wav(filename)
   f = open(filename)
   format = WavFile::readFormat(f)
   dataChunk = WavFile::readDataChunk(f)
@@ -62,9 +62,9 @@ def get_top_10(data)
   Hash[data.sort_by{|bpm, rate| -rate }.take(10)]
 end
 
-def main
+def main(filename = "input.wav")
   # wavファイル読み込み
-  data = read_wav
+  data = read_wav(filename)
   # wavファイルを一定時間(以下フレーム)ごとに区切る。
   data = split_frame(data, FRAME_SIZE)
   # フレームごとの音量を求める。
@@ -76,8 +76,7 @@ def main
   plot("all_match", all_match)
   # 周波数成分のピークを検出する。
   top_10 = get_top_10(all_match)
-  p top_10
-
+  return top_10
   # ピークの周波数からテンポを計算する。
   # ピークの周波数成分の位相から拍の開始位置を計算する。
 end
@@ -96,8 +95,8 @@ def plot(info, data)
   else
     g.data(info, data)
   end
-  g.write("output.png")
+  g.write("public/output.png")
 end
 
-main
+main if __FILE__ == $0
 
