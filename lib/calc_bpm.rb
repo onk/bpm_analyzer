@@ -16,7 +16,7 @@ def read_data(filename)
   case movie.audio_codec
   when "mp3", "flac"
     FileUtils.mkdir_p("tmp")
-    movie.transcode("tmp/tmp.wav")
+    movie.transcode("tmp/tmp.wav", "-ar 44100")
     filename = "tmp/tmp.wav"
   end
 
