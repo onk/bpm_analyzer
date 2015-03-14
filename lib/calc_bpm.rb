@@ -8,9 +8,18 @@ MAX_BPM = 300
 
 Bundler.require
 
-# wav ファイル読み込み
+# wav/mp3/flac ファイル読み込み
 # http://shokai.org/blog/archives/5408
-def read_wav(filename)
+def read_data(filename)
+  # mp3/flac なら wav に変換
+  movie = FFMPEG::Movie.new(filename)
+  case movie.audio_codec
+  when "mp3", "flac"
+    FileUtils.mkdir_p("tmp")
+    movie.transcode("tmp/tmp.wav")
+    filename = "tmp/tmp.wav"
+  end
+
   f = open(filename)
   format = WavFile::readFormat(f)
   dataChunk = WavFile::readDataChunk(f)
@@ -64,7 +73,7 @@ end
 
 def main(filename = "input.wav")
   # wavファイル読み込み
-  data = read_wav(filename)
+  data = read_data(filename)
   # wavファイルを一定時間(以下フレーム)ごとに区切る。
   data = split_frame(data, FRAME_SIZE)
   # フレームごとの音量を求める。
